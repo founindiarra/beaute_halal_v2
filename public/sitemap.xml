@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://beaute-halal.aeemci-ce.ci/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://beaute-halal.aeemci-ce.ci/services</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://beaute-halal.aeemci-ce.ci/rendez-vous</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://beaute-halal.aeemci-ce.ci/galerie</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://beaute-halal.aeemci-ce.ci/a-propos</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://beaute-halal.aeemci-ce.ci/contact</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+</urlset>

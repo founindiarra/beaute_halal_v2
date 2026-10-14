@@ -1,0 +1,387 @@
+@import 'tailwindcss';
+
+/* ------------------------------------------------------------------
+   Beauté Halal — Design tokens
+   Palette : crème, beige, sable, nude, brun/chocolat, doré très subtil
+------------------------------------------------------------------- */
+@theme {
+  --font-display: 'Cormorant Garamond', ui-serif, Georgia, serif;
+  --font-sans: 'Jost', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --color-cream: #fdfbf7;
+  --color-ivory: #f8f2e9;
+  --color-sand: #efe4d5;
+  --color-sand-dark: #e0cdb6;
+  --color-nude: #d6b79b;
+  --color-gold: #b08a57;
+  --color-gold-soft: #cbac81;
+  /*
+   * Le brun du site, repris du fond des bandeaux : plus chaud et plus soutenu
+   * que le chocolat d'origine. « cocoa-dark » est la teinte des grands aplats
+   * — pied de page, bandeaux, bouton principal — et du texte sur fond crème ;
+   * « cocoa » en est l'éclaircie, « ink » le fond de l'ombre.
+   */
+  --color-cocoa: #7c4527;
+  --color-cocoa-dark: #572a13;
+  --color-ink: #3a2113;
+  --color-muted: #7d6b5d;
+
+  --shadow-soft: 0 18px 40px -28px rgba(87, 42, 19, 0.5);
+  --shadow-lift: 0 26px 60px -32px rgba(87, 42, 19, 0.6);
+
+  /* ── Éclat ───────────────────────────────────────────────────────────────
+     Rien de neuf dans la palette : ces valeurs ne font que doser la lumière
+     à partir du doré et du chocolat déjà définis plus haut. Elles servent à
+     donner de la matière — un liseré clair en haut des surfaces, une ombre
+     plus profonde en dessous, un halo diffus derrière les titres.
+  ------------------------------------------------------------------------ */
+  --shadow-glow: 0 30px 70px -34px rgba(87, 42, 19, 0.55), 0 2px 10px -4px rgba(176, 138, 87, 0.18);
+  --ring-light: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  --halo-gold: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--color-gold-soft) 38%, transparent),
+    transparent 72%
+  );
+  --sheen: linear-gradient(100deg, transparent 20%, rgba(255, 255, 255, 0.34) 48%, transparent 72%);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    overflow-x: hidden;
+    background-color: var(--color-cream);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--color-cocoa-dark);
+  }
+
+  img {
+    max-width: 100%;
+    display: block;
+  }
+
+  /*
+   * Les photos d'un salon sont prises sous des lumières très variables.
+   * Une reprise légère — un peu de densité, un peu de chaleur — les remet
+   * toutes dans la même tonalité et les fait sortir de l'écran. Volontairement
+   * discret : au-delà, on verrait le filtre avant de voir la coiffure.
+   */
+  .photo-rich {
+    filter: saturate(1.09) contrast(1.05) brightness(1.02);
+  }
+
+  /*
+   * Texte posé à même la photo, sur les écrans étroits. C'est l'ombre portée
+   * des lettres qui assure la lisibilité, et non un voile sur toute la
+   * largeur : la photo reste visible derrière. À partir de « sm » le texte
+   * revient sur le fond, l'ombre n'a plus lieu d'être.
+   */
+  .texte-sur-photo {
+    text-shadow:
+      0 1px 2px rgba(26, 17, 12, 0.62),
+      0 6px 18px rgba(26, 17, 12, 0.5);
+  }
+
+  /* Les boutons ont leur propre fond : l'ombre y salirait le libellé. */
+  .texte-sur-photo :where(a, button) {
+    text-shadow: none;
+  }
+
+  @media (min-width: 640px) {
+    .texte-sur-photo {
+      text-shadow: none;
+    }
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--color-sand);
+    color: var(--color-ink);
+  }
+}
+
+@layer components {
+  /* Largeur de page unique, gouttières garanties sur tous les écrans */
+  .container-page {
+    width: 100%;
+    margin-inline: auto;
+    max-width: 80rem;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .container-page {
+      padding-inline: 2rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container-page {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  .section {
+    padding-block: 4rem;
+  }
+
+  @media (min-width: 640px) {
+    .section {
+      padding-block: 5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .section {
+      padding-block: 7rem;
+    }
+  }
+
+  .eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+    font-weight: 500;
+  }
+
+  /*
+   * Une carte n'est plus un rectangle blanc posé à plat : un dégradé
+   * imperceptible du blanc vers l'ivoire lui donne du volume, le liseré clair
+   * en haut simule la lumière qui frappe l'arête, et l'ombre porte plus loin.
+   * Trois détails qu'on ne remarque pas un par un, et qui ensemble font la
+   * différence entre « propre » et « soigné ».
+   */
+  .card-surface {
+    background: #fff;
+    border: 1px solid color-mix(in srgb, var(--color-sand-dark) 70%, transparent);
+    border-radius: 1rem;
+  }
+
+  /*
+   * Voile bas sur un visuel de carte. Sans lui, la photo s'arrête net sur le
+   * bloc de texte : la coupure se voit. Avec, l'image descend dans la carte et
+   * l'ensemble se lit comme un seul objet.
+   */
+  .media-veil::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 45%;
+    background: linear-gradient(
+      to top,
+      color-mix(in srgb, var(--color-cocoa-dark) 34%, transparent),
+      transparent
+    );
+    pointer-events: none;
+  }
+
+  /*
+   * L'arche : le motif signature du site. Un cadre dont le haut est un demi-cercle,
+   * doublé d'un filet doré décalé. Les photos s'y « tiennent » comme dans une niche.
+   */
+  .arch {
+    position: relative;
+    overflow: hidden;
+    border-radius: 999px 999px 0 0;
+    background: var(--color-sand-dark);
+  }
+
+  .arch-frame {
+    position: relative;
+    isolation: isolate;
+    margin-right: clamp(0.6rem, 1.4vw, 1.1rem);
+  }
+
+  .arch-frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border: 1px solid var(--color-gold);
+    border-radius: 999px 999px 0 0;
+    transform: translate(clamp(0.6rem, 1.4vw, 1.1rem), calc(-1 * clamp(0.6rem, 1.4vw, 1.1rem)));
+  }
+
+  /* Halo doré diffus — posé derrière un titre ou une image, jamais devant. */
+  .halo {
+    position: absolute;
+    border-radius: 9999px;
+    background: var(--halo-gold);
+    filter: blur(6px);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /*
+   * Filet dégradé sous les intitulés de section : le trait part du doré plein
+   * et s'éteint, au lieu de s'arrêter net. Détail minuscule, effet immédiat.
+   */
+  .rule-gold {
+    height: 1px;
+    border: 0;
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--color-gold) 85%, transparent),
+      color-mix(in srgb, var(--color-gold) 15%, transparent)
+    );
+  }
+
+  .rule-gold-light {
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--color-gold-soft) 90%, transparent),
+      color-mix(in srgb, var(--color-gold-soft) 15%, transparent)
+    );
+  }
+
+  .field-label {
+    display: block;
+    font-size: 0.85rem;
+    letter-spacing: 0.02em;
+    color: var(--color-muted);
+    margin-bottom: 0.45rem;
+  }
+
+  .field-input {
+    width: 100%;
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-sand-dark);
+    background: #fff;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    color: var(--color-ink);
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .field-input::placeholder {
+    color: color-mix(in srgb, var(--color-muted) 60%, transparent);
+  }
+
+  .field-input:focus {
+    outline: none;
+    border-color: var(--color-gold);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-gold) 22%, transparent);
+  }
+
+  .field-input[aria-invalid='true'] {
+    border-color: #b4523f;
+  }
+}
+
+/* Révélation douce au défilement (directive v-reveal) */
+@layer utilities {
+  /* Entrée du haut de page : un seul moment orchestré, le reste répond aux gestes. */
+  .hero-rise {
+    animation: hero-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .hero-fade {
+    animation: hero-fade 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+  }
+
+  @keyframes hero-rise {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+  }
+
+  @keyframes hero-fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-rise,
+    .hero-fade {
+      animation: none;
+    }
+  }
+
+  /*
+   * Reflet satiné : une bande claire traverse le bouton au survol, comme la
+   * lumière sur une surface lisse. Elle ne se déclenche qu'au survol d'un
+   * pointeur — jamais au doigt, où elle n'aurait aucun sens.
+   */
+  .sheen {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .sheen::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--sheen);
+    transform: translateX(-120%);
+    transition: transform 0.75s cubic-bezier(0.22, 0.61, 0.36, 1);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  @media (hover: hover) {
+    .sheen:hover::after {
+      transform: translateX(120%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sheen::after {
+      display: none;
+    }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.7s ease,
+      transform 0.7s ease;
+  }
+
+  .reveal-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}

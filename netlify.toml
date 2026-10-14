@@ -1,0 +1,12 @@
+# Déploiement Netlify.
+# La variable VITE_API_URL doit aussi être définie dans l'interface Netlify
+# (Site settings → Environment variables) : elle est lue au moment du build.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

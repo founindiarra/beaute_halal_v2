@@ -1,0 +1,4 @@
+# Réécriture pour application monopage (Netlify).
+# Toute adresse inconnue est servie par index.html, avec un code 200 :
+# c'est ensuite le routeur Vue qui décide quoi afficher, y compris la page 404.
+/*    /index.html   200

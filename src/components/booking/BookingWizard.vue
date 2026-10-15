@@ -325,10 +325,8 @@ watch(
         -->
         <div :class="state.step === 5 ? 'lg:col-span-12' : 'lg:col-span-8'">
           <div class="mb-6 flex flex-col gap-1.5">
-            <span class="text-[0.72rem] uppercase tracking-[0.26em] text-gold">
-              Étape {{ String(state.step).padStart(2, '0') }}
-            </span>
-            <h2 class="text-2xl sm:text-3xl">{{ currentTitle.title }}</h2>
+            <span class="eyebrow">Étape {{ String(state.step).padStart(2, '0') }}</span>
+            <h2 class="text-[2rem] sm:text-4xl">{{ currentTitle.title }}</h2>
             <p class="text-sm text-muted">{{ currentTitle.hint }}</p>
           </div>
 
@@ -350,7 +348,8 @@ watch(
             </div>
           </div>
 
-          <div ref="stepPanel">
+          <Transition name="step" mode="out-in">
+          <div :key="state.step" ref="stepPanel">
             <!--
               Étape 1, parcours A avec prestation rattachée : la cliente n'a
               rien à choisir. On confirme la sélection et on la pousse vers la
@@ -418,6 +417,7 @@ watch(
               :customer="state.customer"
             />
           </div>
+          </Transition>
 
           <!-- Navigation -->
           <div class="mt-8 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -462,8 +462,10 @@ watch(
 
         <!-- Récapitulatif latéral -->
         <aside v-if="state.step < 5" class="lg:col-span-4">
-          <div class="flex flex-col gap-4 rounded-2xl bg-cocoa-dark p-6 text-cream lg:sticky lg:top-28">
-            <h3 class="font-display text-2xl text-cream">Votre sélection</h3>
+          <div
+            class="bg-espresso-deep grain relative flex flex-col gap-5 overflow-hidden rounded-xl border border-gold-soft/25 p-7 text-cream shadow-[var(--shadow-lift)] lg:sticky lg:top-28"
+          >
+            <h3 class="font-display text-3xl text-cream">Votre sélection</h3>
 
             <!-- Coiffure choisie dans « Nos coiffures », rappelée jusqu'au bout. -->
             <div

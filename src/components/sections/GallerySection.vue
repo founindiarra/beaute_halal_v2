@@ -21,14 +21,31 @@ const {
 </script>
 
 <template>
-  <section class="bg-cocoa-dark py-10 sm:py-12 lg:py-14">
-    <div class="container-page flex flex-col gap-8">
-      <SectionHeading
-        eyebrow="Nos coiffures"
-        title="Quelques coiffures du salon"
-        subtitle="Créations, entretiens, coiffures et colorations : cliquez sur « Réserver cette coiffure » pour partir de celle qui vous plaît."
-        tone="light"
-      />
+  <section class="bg-espresso-deep grain section relative overflow-hidden">
+    <span
+      v-parallax="0.1"
+      class="outline-text pointer-events-none absolute -right-10 top-4 select-none font-display text-[14rem] font-light italic leading-none opacity-50 lg:text-[22rem]"
+      aria-hidden="true"
+    >
+      02
+    </span>
+
+    <div class="container-page relative z-10 flex flex-col gap-14 lg:gap-20">
+      <div class="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+        <SectionHeading
+          eyebrow="Nos coiffures"
+          title="Quelques coiffures du salon"
+          subtitle="Créations, entretiens, coiffures et colorations : cliquez sur « Réserver cette coiffure » pour partir de celle qui vous plaît."
+          tone="light"
+        />
+
+        <div v-reveal class="shrink-0">
+          <BaseButton :to="{ name: 'gallery' }" variant="outline-light" size="md">
+            Voir toutes nos coiffures
+            <AppIcon name="arrow-right" class="h-4 w-4" />
+          </BaseButton>
+        </div>
+      </div>
 
       <DataState
         :loading="loading"
@@ -36,19 +53,11 @@ const {
         :empty="!items.length"
         loading-label="Chargement des coiffures…"
         empty-label="Aucune coiffure n’est publiée pour le moment."
+        tone="light"
         @retry="reload"
       >
-        <div v-reveal>
-          <GalleryGrid :items="items" @open="openIndex = $event" />
-        </div>
+        <GalleryGrid :items="items" tone="dark" @open="openIndex = $event" />
       </DataState>
-
-      <div class="flex">
-        <BaseButton :to="{ name: 'gallery' }" variant="outline-light" size="md">
-          Voir toutes nos coiffures
-          <AppIcon name="arrow-right" class="h-4 w-4" />
-        </BaseButton>
-      </div>
     </div>
 
     <GalleryLightbox

@@ -21,8 +21,9 @@ const { data: team, loading, error, reload } = useApiData(fetchTeam, [])
     />
 
     <section class="section bg-cream">
-      <div class="container-page flex flex-col gap-12">
+      <div class="container-page flex flex-col gap-16">
         <SectionHeading
+          align="center"
           eyebrow="Faites connaissance"
           title="Chacune sa spécialité"
           subtitle="Lors de la prise de rendez-vous, nous vous orientons vers la personne la plus adaptée à votre demande."
@@ -36,8 +37,8 @@ const { data: team, loading, error, reload } = useApiData(fetchTeam, [])
           empty-label="L’équipe sera présentée très bientôt."
           @retry="reload"
         >
-          <ul class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-9">
-            <li v-for="(member, index) in team" :key="member.id" v-reveal="index * 60">
+          <ul class="grid gap-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-9">
+            <li v-for="(member, index) in team" :key="member.id" v-reveal="index * 100">
               <TeamCard :member="member" detailed />
             </li>
           </ul>

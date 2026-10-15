@@ -3,6 +3,8 @@ import { watch } from 'vue'
 
 import AppFooter from '@/components/layout/AppFooter.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
+import CursorFollower from '@/components/layout/CursorFollower.vue'
+import IntroCurtain from '@/components/layout/IntroCurtain.vue'
 import { useSalon } from '@/composables/useSalon'
 import { applySalonJsonLd } from '@/utils/seo'
 
@@ -23,10 +25,13 @@ watch(
 </script>
 
 <template>
-  <div class="flex min-h-dvh flex-col overflow-x-hidden bg-cream">
+  <div class="flex min-h-dvh flex-col overflow-x-clip bg-cream">
+    <IntroCurtain />
+    <CursorFollower />
+
     <a
       href="#contenu"
-      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-full focus:bg-cocoa-dark focus:px-5 focus:py-3 focus:text-sm focus:text-cream"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[210] focus:rounded-full focus:bg-cocoa-dark focus:px-5 focus:py-3 focus:text-sm focus:text-cream"
     >
       Aller au contenu
     </a>
@@ -35,13 +40,7 @@ watch(
 
     <main id="contenu" class="flex-1">
       <RouterView v-slot="{ Component }">
-        <Transition
-          mode="out-in"
-          enter-active-class="transition-opacity duration-300 ease-out"
-          enter-from-class="opacity-0"
-          leave-active-class="transition-opacity duration-150 ease-in"
-          leave-to-class="opacity-0"
-        >
+        <Transition name="page" mode="out-in">
           <component :is="Component" />
         </Transition>
       </RouterView>

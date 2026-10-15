@@ -76,9 +76,17 @@ const submit = async () => {
 </script>
 
 <template>
-  <form class="card-surface flex flex-col gap-5 p-5 sm:p-7" novalidate @submit.prevent="submit">
-    <div class="flex flex-col gap-1.5">
-      <h2 class="text-2xl sm:text-3xl">Écrivez-nous</h2>
+  <form
+    class="card-surface relative flex flex-col gap-7 overflow-hidden p-6 sm:p-10"
+    novalidate
+    @submit.prevent="submit"
+  >
+    <span
+      class="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-gold via-gold-soft to-gold"
+      aria-hidden="true"
+    />
+    <div class="flex flex-col gap-2">
+      <h2 class="text-[2rem] sm:text-4xl">Écrivez-nous</h2>
       <p class="text-sm text-muted">
         Une question sur une prestation, un conseil d’entretien ? Nous répondons sous 24 h ouvrées.
       </p>

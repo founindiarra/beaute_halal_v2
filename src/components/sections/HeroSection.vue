@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/ui/AppIcon.vue'
 import AppImage from '@/components/ui/AppImage.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import { useIsWide } from '@/composables/useBreakpoint'
@@ -13,79 +14,123 @@ const isLarge = useIsWide()
 
 <template>
   <!--
-    Composition éditoriale : le texte posé sur l'ivoire, la photographie dans
-    une arche à droite. Le haut de la page reste calme, c'est la photo qui
-    porte la marque. « pt » doit rester supérieur à la hauteur de l'en-tête
-    fixe (≈ 68 px sur mobile, 86 px à partir de « lg »).
+    Plein écran, sombre, cinématographique. La photo — déjà fondue dans le brun
+    de la marque — occupe tout le cadre et glisse lentement au défilement ; le
+    texte se pose à gauche, sur le brun.
   -->
-  <section class="relative overflow-hidden border-b border-sand-dark/50 bg-ivory">
+  <section
+    class="bg-espresso-deep grain relative isolate flex min-h-[100svh] flex-col overflow-hidden"
+  >
+    <!-- Photo -->
+    <div class="fade-in absolute inset-0 -z-10 [--d:200ms]">
+      <div
+        v-parallax="0.16"
+        class="absolute inset-x-0 -inset-y-[4%] [mask-image:linear-gradient(to_bottom,transparent_0,#000_14%,#000_86%,transparent_100%)] max-lg:bottom-auto max-lg:top-0 max-lg:h-[62svh] max-lg:[mask-image:linear-gradient(to_bottom,#000_55%,transparent_100%)] lg:top-[8%] lg:bottom-[6%]"
+      >
+        <AppImage
+          v-if="isLarge"
+          :src="images.hero"
+          alt="Cliente aux locks, vêtue d’une chemise à carreaux, au salon Beauté Halal"
+          ratio="fill"
+          eager
+          class="kenburns h-full w-full"
+          img-class="object-[80%_center]"
+        />
+        <AppImage
+          v-else
+          :src="images.heroMobile"
+          alt="Cliente aux locks, vêtue d’une chemise à carreaux, au salon Beauté Halal"
+          ratio="fill"
+          eager
+          class="kenburns h-full w-full"
+          img-class="object-[72%_0%]"
+        />
+      </div>
+
+      <!-- Voiles : le brun reprend le dessus à gauche (texte) et en bas (transition) -->
+      <div
+        class="absolute inset-0 bg-gradient-to-r from-espresso/90 from-5% via-espresso/45 via-40% to-transparent to-75% max-lg:hidden"
+      />
+      <div
+        class="absolute inset-0 bg-gradient-to-t from-espresso from-4% via-espresso/65 via-38% to-transparent to-62% lg:from-espresso/80 lg:via-transparent lg:to-espresso/35"
+      />
+    </div>
+
+    <!-- Halo de lumière derrière le sujet -->
+    <span
+      class="halo float -z-10 hidden h-[44rem] w-[44rem] opacity-60 lg:block"
+      style="right: -4rem; top: 4rem"
+      aria-hidden="true"
+    />
+
     <div
-      class="container-page grid items-end gap-10 pt-[5.5rem] sm:pt-24 lg:min-h-[min(35rem,calc(100svh-1px))] lg:grid-cols-[1.12fr_0.88fr] lg:gap-14 lg:pt-28 xl:gap-24"
+      class="container-page flex flex-1 items-end pb-24 pt-[46svh] sm:pb-32 sm:pt-32 lg:items-center lg:pb-24 lg:pt-36"
     >
-      <div class="flex max-w-xl flex-col gap-5 pb-2 lg:self-center lg:pb-12">
-        <span class="hero-rise flex items-center gap-4 text-[0.72rem] font-medium uppercase tracking-[0.3em] text-cocoa">
-          <span class="h-px w-10 bg-gold" aria-hidden="true" />
+      <div class="flex max-w-2xl flex-col gap-6 sm:gap-7">
+        <span
+          class="rise eyebrow !text-gold-soft [--d:200ms]"
+        >
           L’art des locks
         </span>
 
         <h1
-          class="hero-rise text-[2.6rem] leading-[0.98] tracking-[-0.015em] text-cocoa-dark [animation-delay:90ms] sm:text-5xl lg:text-[3.9rem] xl:text-[4.3rem]"
+          v-split="250"
+          class="text-[3.1rem] leading-[0.95] tracking-[-0.025em] text-cream sm:text-7xl lg:text-[5.8rem] xl:text-[6.6rem]"
         >
-          Vos locks, notre signature.
+          Vos locks, <em class="font-normal italic text-gold-soft">notre signature.</em>
         </h1>
 
-        <p class="hero-rise max-w-md text-[1.05rem] leading-relaxed text-muted [animation-delay:180ms] sm:text-lg">
+        <p
+          class="rise max-w-md text-[1.02rem] leading-relaxed text-cream/75 [--d:700ms] sm:max-w-lg sm:text-[1.12rem]"
+        >
           Création, entretien et mise en beauté des locks : un savoir-faire attentif, pensé pour
           révéler votre style et prendre soin de vos cheveux.
         </p>
 
-        <div class="hero-rise mt-2 hidden w-full max-w-sm flex-col gap-3.5 [animation-delay:270ms] lg:flex">
-          <BaseButton :to="{ name: 'booking' }" variant="primary" size="lg" block class="font-semibold">
+        <div class="rise mt-2 flex flex-col gap-3.5 [--d:850ms] sm:flex-row sm:items-center">
+          <BaseButton :to="{ name: 'booking' }" variant="gold" size="lg" magnetic>
             Prendre rendez-vous
+            <AppIcon name="arrow-right" class="h-4 w-4" />
           </BaseButton>
-          <BaseButton :to="{ name: 'services' }" variant="secondary" size="lg" block>
+          <BaseButton :to="{ name: 'services' }" variant="outline-light" size="lg">
             Découvrir nos services
           </BaseButton>
         </div>
       </div>
+    </div>
 
-      <div class="hero-fade arch-frame mx-auto w-full max-w-[19rem] sm:max-w-[22rem] lg:mb-0 lg:max-w-[23rem] lg:justify-self-end">
-        <div class="arch">
-          <AppImage
-            v-if="isLarge"
-            :src="images.hero"
-            alt="Cliente aux locks, vêtue d’une chemise à carreaux, au salon Beauté Halal"
-            ratio="4/4.4"
-            eager
-            class="h-full w-full"
-            img-class="object-[76%_30%]"
-          />
-          <AppImage
-            v-else
-            :src="images.heroMobile"
-            alt="Cliente aux locks, vêtue d’une chemise à carreaux, au salon Beauté Halal"
-            ratio="1/1"
-            eager
-            class="h-full w-full"
-            img-class="object-[70%_6%]"
-          />
-          <p
-            v-if="salon.address.city"
-            class="absolute inset-x-0 bottom-0 bg-ivory/95 px-5 py-3 font-display text-[1.05rem] italic text-cocoa-dark"
-          >
-            {{ salon.name }} · {{ salon.address.city }}
-          </p>
-        </div>
-      </div>
+    <!-- Médaillon rotatif (grand écran) -->
+    <RouterLink
+      :to="{ name: 'booking' }"
+      class="rise group absolute bottom-24 right-[7%] z-10 hidden h-36 w-36 place-items-center rounded-full [--d:1100ms] lg:grid"
+      aria-label="Prendre rendez-vous"
+    >
+      <svg viewBox="0 0 120 120" class="spin-slow absolute inset-0 h-full w-full text-gold-soft" aria-hidden="true">
+        <defs>
+          <path id="ring" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0" />
+        </defs>
+        <text fill="currentColor" font-size="9" font-family="Jost, sans-serif">
+          <textPath href="#ring" textLength="282" lengthAdjust="spacing">CRÉATION · ENTRETIEN · SOINS · COLORATION ·</textPath>
+        </text>
+      </svg>
+      <span
+        class="grid h-16 w-16 place-items-center rounded-full bg-gold-soft text-ink transition-transform duration-500 ease-[var(--ease-expo)] group-hover:scale-110"
+      >
+        <AppIcon name="arrow-right" class="h-5 w-5 -rotate-45 transition-transform duration-500 group-hover:rotate-0" />
+      </span>
+    </RouterLink>
 
-      <!-- Mobile et tablette : les boutons passent sous l'arche -->
-      <div class="hero-rise mx-auto -mt-4 mb-10 flex w-full max-w-[19rem] sm:max-w-[22rem] flex-col gap-3.5 [animation-delay:270ms] lg:hidden">
-        <BaseButton :to="{ name: 'booking' }" variant="primary" size="lg" block class="font-semibold">
-          Prendre rendez-vous
-        </BaseButton>
-        <BaseButton :to="{ name: 'services' }" variant="secondary" size="lg" block>
-          Découvrir nos services
-        </BaseButton>
+    <!-- Pied du hero : indication de défilement + adresse -->
+    <div class="container-page relative z-10 pb-7">
+      <div class="flex items-end justify-between gap-6 text-[0.64rem] uppercase tracking-[0.3em] text-cream/60">
+        <a href="#salon" class="rise group flex items-center gap-4 [--d:1300ms]" aria-label="Faire défiler vers le salon">
+          <span class="relative block h-14 w-px overflow-hidden bg-cream/20 scroll-cue" aria-hidden="true" />
+          <span class="transition-colors group-hover:text-gold-soft">Défiler</span>
+        </a>
+
+        <p v-if="salon.address.city" class="rise hidden text-right [--d:1300ms] sm:block">
+          {{ salon.name }} <span class="mx-2 text-gold-soft">·</span> {{ salon.address.city }}
+        </p>
       </div>
     </div>
   </section>

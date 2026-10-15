@@ -175,7 +175,7 @@ watch(
       <div class="grid gap-3 sm:grid-cols-2">
         <button
           type="button"
-          class="flex items-start gap-3 rounded-xl border border-sand bg-white p-4 text-left transition-colors hover:border-gold"
+          class="flex items-start gap-3 rounded-xl border border-sand bg-white p-5 text-left transition-all duration-500 ease-[var(--ease-expo)] hover:-translate-y-1 hover:border-gold hover:shadow-[var(--shadow-soft)]"
           @click="choisir('connue')"
         >
           <AppIcon name="user" class="mt-0.5 h-5 w-5 shrink-0 text-gold" />
@@ -189,7 +189,7 @@ watch(
 
         <button
           type="button"
-          class="flex items-start gap-3 rounded-xl border border-sand bg-white p-4 text-left transition-colors hover:border-gold"
+          class="flex items-start gap-3 rounded-xl border border-sand bg-white p-5 text-left transition-all duration-500 ease-[var(--ease-expo)] hover:-translate-y-1 hover:border-gold hover:shadow-[var(--shadow-soft)]"
           @click="choisir('nouvelle')"
         >
           <AppIcon name="sparkle" class="mt-0.5 h-5 w-5 shrink-0 text-gold" />

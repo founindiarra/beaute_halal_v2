@@ -16,28 +16,37 @@ defineProps({
   empty: { type: Boolean, default: false },
   loadingLabel: { type: String, default: 'Chargement…' },
   emptyLabel: { type: String, default: 'Rien à afficher pour le moment.' },
-  tone: { type: String, default: 'dark' }, // dark sur fond clair, light sur fond chocolat
+  tone: { type: String, default: 'dark' }, // dark sur fond clair, light sur fond sombre
 })
 
 defineEmits(['retry'])
 </script>
 
 <template>
-  <div v-if="loading" class="flex flex-col items-center gap-4 py-14 text-center">
-    <span
-      class="h-8 w-8 animate-spin rounded-full border-2 border-transparent"
-      :class="tone === 'light' ? 'border-t-gold-soft border-r-gold-soft/40' : 'border-t-gold border-r-gold/30'"
-      aria-hidden="true"
-    />
-    <p class="text-sm" :class="tone === 'light' ? 'text-cream/70' : 'text-muted'">
+  <div v-if="loading" class="flex flex-col items-center gap-5 py-16 text-center">
+    <!-- Trois locks qui se balancent : le chargement à l'image de la marque -->
+    <span class="flex h-10 items-start gap-2" aria-hidden="true">
+      <span
+        v-for="n in 3"
+        :key="n"
+        class="lock-swing block w-[3px] origin-top rounded-full"
+        :class="tone === 'light' ? 'bg-gold-soft' : 'bg-gold'"
+        :style="{ height: `${[28, 40, 32][n - 1]}px`, animationDelay: `${n * 0.18}s` }"
+      />
+    </span>
+    <p class="text-sm tracking-wide" :class="tone === 'light' ? 'text-cream/70' : 'text-muted'" role="status">
       {{ loadingLabel }}
     </p>
   </div>
 
-  <div v-else-if="error" class="flex flex-col items-center gap-4 py-14 text-center">
+  <div v-else-if="error" class="flex flex-col items-center gap-5 py-16 text-center">
     <span
-      class="grid h-12 w-12 place-items-center rounded-full"
-      :class="tone === 'light' ? 'bg-cream/10 text-gold-soft' : 'bg-ivory text-gold'"
+      class="grid h-14 w-14 place-items-center rounded-full border"
+      :class="
+        tone === 'light'
+          ? 'border-gold-soft/40 text-gold-soft'
+          : 'border-gold/40 bg-ivory text-gold'
+      "
     >
       <AppIcon name="shield" class="h-5 w-5" />
     </span>
@@ -47,14 +56,18 @@ defineEmits(['retry'])
     >
       {{ error }}
     </p>
-    <BaseButton size="sm" :variant="tone === 'light' ? 'outline-light' : 'secondary'" @click="$emit('retry')">
+    <BaseButton
+      size="sm"
+      :variant="tone === 'light' ? 'outline-light' : 'secondary'"
+      @click="$emit('retry')"
+    >
       Réessayer
     </BaseButton>
   </div>
 
   <p
     v-else-if="empty"
-    class="py-14 text-center text-sm"
+    class="py-16 text-center text-sm"
     :class="tone === 'light' ? 'text-cream/70' : 'text-muted'"
   >
     {{ emptyLabel }}
@@ -62,3 +75,25 @@ defineEmits(['retry'])
 
   <slot v-else />
 </template>
+
+<style scoped>
+.lock-swing {
+  animation: swing 1.6s ease-in-out infinite;
+}
+@keyframes swing {
+  0%,
+  100% {
+    transform: rotate(-9deg) scaleY(0.92);
+    opacity: 0.55;
+  }
+  50% {
+    transform: rotate(9deg) scaleY(1);
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lock-swing {
+    animation: none;
+  }
+}
+</style>

@@ -24,12 +24,14 @@ const whatsappMessage = computed(
 
 <template>
   <div class="mx-auto flex w-full max-w-2xl flex-col items-center gap-8 text-center">
-    <span class="grid h-16 w-16 place-items-center rounded-full bg-cocoa-dark text-gold-soft">
-      <AppIcon name="check" class="h-8 w-8" />
+    <span
+      class="pop grid h-20 w-20 place-items-center rounded-full bg-espresso text-gold-soft ring-8 ring-gold/15"
+    >
+      <AppIcon name="check" class="h-9 w-9" />
     </span>
 
     <div class="flex flex-col gap-3">
-      <h2 class="text-[1.9rem] sm:text-4xl">Votre demande est bien enregistrée.</h2>
+      <h2 class="text-[2.2rem] sm:text-5xl">Votre demande est bien enregistrée.</h2>
       <p class="text-muted">
         Merci {{ confirmation.firstName }}. Le salon examine votre demande et vous envoie un e-mail
         dès qu’elle est confirmée. Le créneau n’est pas encore réservé.

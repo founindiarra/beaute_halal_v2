@@ -45,17 +45,18 @@ const grouped = computed(() =>
     <!-- Sommaire des catégories -->
     <nav
       v-if="grouped.length"
-      class="border-b border-sand bg-cream"
+      class="border-b border-sand-dark/50 bg-cream"
       aria-label="Catégories de services"
     >
-      <div class="container-page py-4">
+      <div class="container-page py-5">
         <ul
-          class="-mx-5 flex w-auto gap-2 overflow-x-auto px-5 sm:mx-0 sm:w-full sm:flex-wrap sm:justify-center sm:px-0"
+          class="-mx-5 flex w-auto gap-2.5 overflow-x-auto px-5 sm:mx-0 sm:w-full sm:flex-wrap sm:justify-center sm:px-0"
+          style="scrollbar-width: none"
         >
           <li v-for="category in grouped" :key="category.id" class="shrink-0">
             <a
               :href="`#${category.slug}`"
-              class="inline-flex min-h-[42px] shrink-0 items-center rounded-lg border border-sand-dark bg-white px-5 text-[0.9rem] tracking-[0.03em] text-cocoa transition-colors hover:border-cocoa-dark hover:text-cocoa-dark"
+              class="inline-flex min-h-[44px] shrink-0 items-center rounded-full border border-sand-dark px-6 text-[0.72rem] font-medium uppercase tracking-[0.2em] text-cocoa transition-all duration-500 ease-[var(--ease-expo)] hover:-translate-y-0.5 hover:border-espresso hover:bg-espresso hover:text-gold-soft"
             >
               {{ category.name }}
             </a>
@@ -77,19 +78,28 @@ const grouped = computed(() =>
           v-for="(category, index) in grouped"
           :id="category.slug"
           :key="category.id"
-          class="section scroll-mt-24"
+          class="section scroll-mt-20 overflow-hidden"
           :class="index % 2 === 0 ? 'bg-cream' : 'bg-ivory'"
         >
-          <div class="container-page flex flex-col gap-10">
-            <div class="flex max-w-2xl flex-col gap-3">
-              <span class="eyebrow">Catégorie</span>
-              <h2 class="text-[1.9rem] sm:text-4xl">{{ category.name }}</h2>
-              <span class="h-px w-16 rounded-full bg-gold/50" />
-              <p v-if="category.description" class="text-muted">{{ category.description }}</p>
+          <span
+            class="outline-text pointer-events-none absolute right-4 top-6 select-none font-display text-[9rem] font-light italic leading-none opacity-60 sm:text-[14rem]"
+            aria-hidden="true"
+          >
+            {{ String(index + 1).padStart(2, '0') }}
+          </span>
+
+          <div class="container-page relative flex flex-col gap-12 lg:gap-16">
+            <div class="flex max-w-2xl flex-col gap-5">
+              <span v-reveal:fade class="eyebrow">Catégorie {{ String(index + 1).padStart(2, '0') }}</span>
+              <h2 v-split class="text-[2.4rem] sm:text-5xl lg:text-6xl">{{ category.name }}</h2>
+              <span v-reveal:line="200" class="rule-gold w-24" />
+              <p v-if="category.description" v-reveal="150" class="text-muted sm:text-[1.05rem]">
+                {{ category.description }}
+              </p>
             </div>
 
-            <ul class="grid gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
-              <li v-for="(service, i) in category.items" :key="service.id" v-reveal="i * 60">
+            <ul class="grid gap-6 sm:grid-cols-2 sm:gap-7 lg:grid-cols-3 lg:gap-8">
+              <li v-for="(service, i) in category.items" :key="service.id" v-reveal="(i % 3) * 100">
                 <ServiceCard :service="service" />
               </li>
             </ul>

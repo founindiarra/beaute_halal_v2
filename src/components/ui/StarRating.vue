@@ -8,7 +8,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="flex items-center gap-1" :aria-label="`Note : ${rating} sur ${max}`">
+  <div class="flex items-center gap-1" role="img" :aria-label="`Note : ${rating} sur ${max}`">
     <AppIcon
       v-for="index in max"
       :key="index"

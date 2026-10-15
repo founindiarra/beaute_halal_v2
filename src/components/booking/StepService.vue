@@ -56,23 +56,23 @@ const pad = (n) => String(n).padStart(2, '0')
           {{ category.name }}
         </h3>
 
-        <ul class="divide-y divide-sand overflow-hidden rounded-2xl border border-sand-dark/70 bg-white">
+        <ul class="divide-y divide-sand overflow-hidden rounded-xl border border-sand-dark/70 bg-white shadow-[var(--shadow-soft)]">
           <li v-for="service in category.items" :key="service.id">
             <button
               type="button"
-              class="relative flex w-full items-center gap-4 px-4 py-4 text-left transition-colors duration-200 sm:px-5"
-              :class="isSelected(service) ? 'bg-ivory' : 'hover:bg-ivory/60'"
+              class="relative flex w-full items-center gap-4 px-4 py-5 text-left transition-colors duration-500 sm:px-6"
+              :class="isSelected(service) ? 'bg-ivory' : 'hover:bg-ivory/70'"
               :aria-pressed="isSelected(service)"
               @click="emit('select', service)"
             >
               <span
                 v-if="isSelected(service)"
-                class="absolute inset-y-0 left-0 w-[3px] bg-cocoa-dark"
+                class="absolute inset-y-0 left-0 w-[3px] bg-gold"
                 aria-hidden="true"
               />
               <span
                 class="grid h-5 w-5 shrink-0 place-items-center rounded-full border transition-colors"
-                :class="isSelected(service) ? 'border-cocoa-dark bg-cocoa-dark text-cream' : 'border-sand-dark'"
+                :class="isSelected(service) ? 'border-espresso bg-espresso text-gold-soft' : 'border-sand-dark'"
               >
                 <AppIcon v-if="isSelected(service)" name="check" class="h-3 w-3" />
               </span>

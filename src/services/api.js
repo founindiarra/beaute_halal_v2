@@ -6,7 +6,7 @@
  * (voir .env / .env.example), avec un repli sur le serveur local.
  */
 
-const BASE_URL = (import.meta.env.VITE_API_URL || 'http://localhost:4000/api').replace(/\/+$/, '')
+const BASE_URL = (import.meta.env.VITE_API_URL || 'https://backend-beaute-halal.aeemci-ce.ci/api').replace(/\/+$/, '')
 
 /** Au-delà de ce délai, la requête est abandonnée et signalée à l'utilisateur. */
 const DEFAULT_TIMEOUT = 12000

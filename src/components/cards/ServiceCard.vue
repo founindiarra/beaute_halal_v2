@@ -10,6 +10,8 @@ import { formatDuration, formatPrice } from '@/utils/format'
 const props = defineProps({
   service: { type: Object, required: true },
   ratio: { type: String, default: '3/4' },
+  /** Numéro d'ordre affiché en filigrane (facultatif). */
+  index: { type: Number, default: null },
 })
 
 const router = useRouter()
@@ -34,10 +36,13 @@ const book = () => {
     fait que dupliquer une action déjà accessible.
 
     Carte « affiche » : la photo occupe toute la carte, le texte se pose sur
-    un voile chocolat en bas.
+    un voile brun en bas ; au survol la photo respire et un filet doré se trace.
   -->
   <article
-    class="group relative isolate h-full cursor-pointer overflow-hidden rounded-2xl bg-cocoa-dark shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-lift)]"
+    v-tilt="3.5"
+    data-cursor="view"
+    data-cursor-label="Réserver"
+    class="group relative isolate h-full cursor-pointer overflow-hidden rounded-xl bg-espresso shadow-[var(--shadow-soft)] transition-shadow duration-700 hover:shadow-[var(--shadow-lift)]"
     @click="book"
   >
     <AppImage
@@ -45,34 +50,48 @@ const book = () => {
       :alt="`${service.name} — Beauté Halal`"
       :ratio="ratio"
       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-      class="transition-transform duration-700 group-hover:scale-[1.05]"
+      class="transition-transform duration-[1600ms] ease-[var(--ease-expo)] group-hover:scale-[1.07]"
     />
 
     <div
-      class="pointer-events-none absolute inset-0 bg-gradient-to-t from-cocoa-dark from-8% via-cocoa-dark/70 via-42% to-transparent to-72%"
+      class="pointer-events-none absolute inset-0 bg-gradient-to-t from-espresso from-6% via-espresso/65 via-44% to-transparent to-75%"
       aria-hidden="true"
     />
 
+    <!-- Numéro en filigrane -->
     <span
-      class="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-cream/92 px-3 py-1.5 text-xs text-cocoa-dark backdrop-blur"
+      v-if="index !== null"
+      class="pointer-events-none absolute right-5 top-3 font-display text-6xl font-light italic text-cream/25 transition-colors duration-700 group-hover:text-gold-soft/70"
+      aria-hidden="true"
     >
-      <AppIcon name="clock" class="h-3.5 w-3.5 text-gold" />
+      {{ String(index + 1).padStart(2, '0') }}
+    </span>
+
+    <span
+      class="glass-dark absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[0.7rem] tracking-[0.12em] text-cream"
+    >
+      <AppIcon name="clock" class="h-3.5 w-3.5 text-gold-soft" />
       {{ formatDuration(service.durationMinutes) }}
     </span>
 
-    <div class="absolute inset-x-0 bottom-0 flex flex-col gap-3 p-5 text-cream sm:p-6">
-      <div class="flex flex-col gap-1.5">
-        <h3 class="text-[1.45rem] leading-snug text-cream">{{ service.name }}</h3>
-        <p class="font-display text-lg text-gold-soft">
+    <div class="absolute inset-x-0 bottom-0 flex flex-col gap-4 p-6 text-cream sm:p-7">
+      <div class="flex flex-col gap-2">
+        <h3 class="text-[1.7rem] leading-[1.05] text-cream sm:text-[1.9rem]">{{ service.name }}</h3>
+        <p class="font-display text-xl italic text-gold-soft">
           À partir de {{ formatPrice(service.price, service.currency) }}
         </p>
-        <p class="line-clamp-2 text-sm leading-relaxed text-cream/80">{{ service.description }}</p>
+        <p class="line-clamp-2 text-sm leading-relaxed text-cream/70">{{ service.description }}</p>
       </div>
 
-      <BaseButton size="sm" variant="outline-light" block>
+      <BaseButton size="sm" variant="outline-light" class="self-start">
         Réserver
         <AppIcon name="arrow-right" class="h-4 w-4" />
       </BaseButton>
     </div>
+
+    <span
+      class="absolute inset-x-0 bottom-0 h-[3px] origin-left scale-x-0 bg-gradient-to-r from-gold via-gold-soft to-gold transition-transform duration-[900ms] ease-[var(--ease-expo)] group-hover:scale-x-100"
+      aria-hidden="true"
+    />
   </article>
 </template>

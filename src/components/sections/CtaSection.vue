@@ -24,60 +24,64 @@ defineProps({
 
 <template>
   <!--
-    Le bloc se détache de la page : marges sur les côtés, respiration avant le
-    pied de page, angles adoucis. Il ne barre plus l'écran d'un bord à l'autre.
+    Le bloc se détache de la page : marges sur les côtés, angles généreux. La
+    photo — déjà fondue dans le brun — glisse doucement derrière le texte.
   -->
-  <section
-    class="relative isolate mx-4 mt-6 mb-8 overflow-hidden rounded-xl bg-cocoa-dark sm:mx-6 sm:mt-8 sm:mb-10 lg:mx-10 lg:mb-14"
-  >
-    <div class="absolute inset-0 -z-10">
-      <AppImage
-        v-if="isLarge"
-        :src="images.cta"
-        alt=""
-        ratio="13/5"
-        decorative
-        class="h-full w-full"
-        img-class="object-[50%_45%]"
-      />
-      <AppImage
-        v-else
-        :src="images.ctaMobile"
-        alt=""
-        ratio="3/5"
-        decorative
-        class="h-full w-full"
-        img-class="object-[50%_2%]"
-      />
-      <!--
-        Voile réduit : on doit voir la coiffure. Il reste plus marqué sur
-        téléphone, où le texte passe devant la photo au lieu d'être à côté.
-      -->
+  <section class="bg-cream px-4 pb-10 pt-6 sm:px-6 sm:pb-12 sm:pt-10 lg:px-10 lg:pb-16 lg:pt-14">
+    <div
+      v-reveal:zoom
+      class="bg-espresso-deep grain relative isolate mx-auto max-w-[96rem] overflow-hidden rounded-[1.75rem] sm:rounded-[2.25rem]"
+    >
+      <div class="absolute inset-0 -z-10">
+        <div v-parallax="0.12" class="absolute -inset-y-[10%] inset-x-0">
+          <AppImage
+            v-if="isLarge"
+            :src="images.cta"
+            alt=""
+            ratio="fill"
+            decorative
+            class="h-full w-full"
+            img-class="object-[88%_30%]"
+          />
+          <AppImage
+            v-else
+            :src="images.ctaMobile"
+            alt=""
+            ratio="fill"
+            decorative
+            class="h-full w-full"
+            img-class="object-[50%_2%]"
+          />
+        </div>
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-espresso from-34% via-espresso/55 via-58% to-transparent to-82% sm:bg-gradient-to-r sm:from-espresso/92 sm:from-8% sm:via-espresso/55 sm:via-48% sm:to-transparent sm:to-80%"
+        />
+      </div>
+
+      <!-- Filet doré intérieur -->
       <div
-        class="absolute inset-0 bg-gradient-to-t from-cocoa-dark from-38% via-cocoa-dark/55 via-58% to-transparent to-80% sm:bg-gradient-to-l sm:from-cocoa-dark/35 sm:from-14% sm:via-cocoa-dark/60 sm:via-42% sm:to-cocoa-dark/72"
+        class="pointer-events-none absolute inset-3 rounded-[1.2rem] border border-gold-soft/35 sm:inset-5 sm:rounded-[1.7rem]"
+        aria-hidden="true"
       />
-    </div>
 
-    <div class="pointer-events-none absolute inset-3 border border-gold-soft/45 sm:inset-4" aria-hidden="true" />
+      <div class="container-page relative pb-12 pt-[17rem] sm:pb-20 sm:pt-24 lg:pb-28 lg:pt-32">
+        <div class="flex max-w-2xl flex-col gap-6">
+          <span v-reveal:fade class="eyebrow !text-gold-soft">Rendez-vous</span>
 
-    <div class="container-page pt-[13.5rem] pb-8 sm:pt-12 sm:pb-12 lg:pt-14 lg:pb-14">
-      <div
-        v-reveal
-        class="texte-sur-photo mx-auto flex max-w-3xl flex-col items-center gap-3.5 text-center sm:gap-4"
-      >
-        <span class="eyebrow text-gold-soft">Rendez-vous</span>
+          <h2 v-split class="text-[2.2rem] leading-[1.02] text-cream sm:text-5xl lg:text-[4.2rem]">
+            {{ title }}
+          </h2>
 
-        <h2 class="text-[1.9rem] leading-tight text-cream sm:text-4xl lg:text-[2.85rem]">
-          {{ title }}
-        </h2>
+          <p v-reveal="200" class="max-w-xl text-[1.02rem] leading-relaxed text-cream/75 sm:text-lg">
+            {{ text }}
+          </p>
 
-        <p class="max-w-xl text-[1.02rem] leading-relaxed text-cream/75">{{ text }}</p>
-
-        <div class="mt-1 flex w-full flex-col items-center gap-2.5 sm:w-auto sm:flex-row">
-          <BaseButton :to="{ name: 'booking' }" variant="light" size="lg" class="w-full sm:w-auto">
-            Prendre rendez-vous
-          </BaseButton>
-          <WhatsappButton label="Nous écrire" variant="outline-light" size="lg" />
+          <div v-reveal="350" class="mt-2 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
+            <BaseButton :to="{ name: 'booking' }" variant="gold" size="lg" magnetic class="w-full sm:w-auto">
+              Prendre rendez-vous
+            </BaseButton>
+            <WhatsappButton label="Nous écrire" variant="outline-light" size="lg" />
+          </div>
         </div>
       </div>
     </div>

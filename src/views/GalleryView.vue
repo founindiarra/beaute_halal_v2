@@ -48,7 +48,7 @@ watch(activeCategory, () => (openIndex.value = null))
     />
 
     <section class="section bg-cream">
-      <div class="container-page flex flex-col gap-10">
+      <div class="container-page flex flex-col gap-12">
         <DataState
           :loading="loading"
           :error="error"
@@ -57,13 +57,26 @@ watch(activeCategory, () => (openIndex.value = null))
           empty-label="Aucune coiffure n’est publiée pour le moment."
           @retry="reload"
         >
-          <GalleryFilters v-if="categories.length" v-model="activeCategory" :categories="categories" />
+          <div class="flex flex-col items-center gap-5">
+            <GalleryFilters
+              v-if="categories.length"
+              v-model="activeCategory"
+              :categories="categories"
+              class="w-full"
+            />
 
-          <p class="text-center text-sm text-muted">
-            {{ filteredItems.length }} coiffure{{ filteredItems.length > 1 ? 's' : '' }}
-          </p>
+            <p class="font-display text-lg italic text-muted">
+              {{ filteredItems.length }} coiffure{{ filteredItems.length > 1 ? 's' : '' }}
+            </p>
+          </div>
 
-          <GalleryGrid v-if="filteredItems.length" :items="filteredItems" @open="openIndex = $event" />
+          <!-- Changer de catégorie rejoue l'entrée de la grille -->
+          <GalleryGrid
+            v-if="filteredItems.length"
+            :key="activeCategory"
+            :items="filteredItems"
+            @open="openIndex = $event"
+          />
           <p v-else class="py-10 text-center text-sm text-muted">
             Aucune coiffure dans cette catégorie pour le moment.
           </p>

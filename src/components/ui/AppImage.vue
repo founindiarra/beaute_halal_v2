@@ -5,7 +5,8 @@ import AppLogo from '@/components/ui/AppLogo.vue'
 
 /**
  * Image avec état de chargement et repli élégant si la photo est indisponible.
- * `ratio` accepte toute valeur CSS aspect-ratio ('4/5', '16/9'…).
+ * `ratio` accepte toute valeur CSS aspect-ratio ('4/5', '16/9'…) ; la valeur
+ * spéciale « fill » remplit le parent (qui doit alors avoir une hauteur).
  */
 const props = defineProps({
   src: { type: String, required: true },
@@ -18,8 +19,7 @@ const props = defineProps({
   /**
    * Classes appliquées à la balise image elle-même, et non au cadre. Sert à
    * choisir la partie de la photo à préserver quand le cadre est plus étroit
-   * ou plus large qu'elle (« object-[70%_45%] »), au besoin par palier
-   * d'écran. Vide, le navigateur centre comme avant.
+   * ou plus large qu'elle (« object-[70%_45%] »), au besoin par palier d'écran.
    */
   imgClass: { type: String, default: '' },
 })
@@ -37,7 +37,11 @@ watch(
 </script>
 
 <template>
-  <div class="relative w-full overflow-hidden bg-sand" :style="{ aspectRatio: ratio }">
+  <div
+    class="relative w-full overflow-hidden bg-sand"
+    :class="ratio === 'fill' ? 'h-full' : ''"
+    :style="ratio === 'fill' ? null : { aspectRatio: ratio }"
+  >
     <div
       v-if="!loaded && !failed"
       class="absolute inset-0 animate-pulse bg-gradient-to-br from-sand via-ivory to-sand-dark"
@@ -66,8 +70,8 @@ watch(
       :loading="eager ? 'eager' : 'lazy'"
       :fetchpriority="eager ? 'high' : 'auto'"
       decoding="async"
-      class="photo-rich h-full w-full object-cover transition-[opacity,transform] duration-700 ease-out"
-      :class="[loaded ? 'opacity-100' : 'opacity-0', imgClass]"
+      class="photo-rich h-full w-full object-cover transition-[opacity,scale] duration-[1400ms] ease-[var(--ease-expo)]"
+      :class="[loaded ? 'scale-100 opacity-100' : 'scale-[1.12] opacity-0', imgClass]"
       @load="loaded = true"
       @error="failed = true"
     />

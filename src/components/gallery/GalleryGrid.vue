@@ -8,11 +8,16 @@ import { formatPrice } from '@/utils/format'
 
 defineProps({
   items: { type: Array, required: true },
+  /** 'light' sur fond clair, 'dark' sur fond brun. */
+  tone: { type: String, default: 'light' },
 })
 
 defineEmits(['open'])
 
 const router = useRouter()
+
+/** Proportions alternées : la grille respire comme une planche contact. */
+const RATIOS = ['4/5', '1/1', '3/4', '4/5', '5/6', '1/1']
 
 /**
  * Réserver la coiffure choisie. Si elle est rattachée à une prestation,
@@ -29,61 +34,80 @@ const book = (item) => {
 </script>
 
 <template>
-  <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6">
-    <li v-for="(item, index) in items" :key="item.id" class="flex flex-col">
-      <button
-        type="button"
-        class="media-veil group relative block w-full overflow-hidden rounded-t-2xl bg-sand text-left"
-        :aria-label="`Agrandir la photo « ${item.title} »`"
-        @click="$emit('open', index)"
-      >
-        <AppImage
-          :src="item.imageUrl"
-          :alt="item.title"
-          ratio="4/5"
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          class="transition-transform duration-700 group-hover:scale-[1.05]"
-        />
-
-        <span
-          class="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-cocoa-dark/85 via-cocoa-dark/15 to-transparent p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"
-        >
-          <span class="font-display text-lg italic text-gold-soft">
-            {{ item.category.name }}
-          </span>
-        </span>
-
-        <span
-          class="pointer-events-none absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full bg-cream/90 text-cocoa-dark opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"
-        >
-          <AppIcon name="expand" class="h-4 w-4" />
-        </span>
-      </button>
-
-      <!-- La réservation reste toujours visible : jamais cachée derrière un survol. -->
-      <div
-        class="flex flex-1 flex-col gap-3 rounded-b-2xl border border-t-0 border-sand-dark/60 bg-white p-4"
-      >
-        <div class="flex flex-col gap-0.5">
-          <h3 class="font-display text-lg leading-snug text-cocoa-dark">{{ item.title }}</h3>
-          <p v-if="item.service" class="text-xs text-muted">
-            {{ item.service.name }} ·
-            <span class="text-cocoa">
-              {{ formatPrice(item.service.price, item.service.currency) }}
-            </span>
-          </p>
-          <p v-else class="text-xs text-muted">{{ item.category.name }}</p>
-        </div>
-
+  <ul class="columns-1 gap-6 sm:columns-2 lg:columns-3 lg:gap-8">
+    <li
+      v-for="(item, index) in items"
+      :key="item.id"
+      v-reveal="(index % 3) * 100"
+      class="mb-8 break-inside-avoid lg:mb-10"
+    >
+      <figure class="group flex flex-col">
         <button
           type="button"
-          class="mt-auto inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg border border-cocoa-dark/35 px-4 text-[0.84rem] tracking-[0.04em] text-cocoa-dark transition-colors hover:border-cocoa-dark hover:bg-cocoa-dark hover:text-cream"
-          @click="book(item)"
+          data-cursor="view"
+          class="relative block w-full overflow-hidden rounded-lg bg-sand text-left"
+          :aria-label="`Agrandir la photo « ${item.title} »`"
+          @click="$emit('open', index)"
         >
-          Réserver cette coiffure
-          <AppIcon name="arrow-right" class="h-3.5 w-3.5" />
+          <AppImage
+            :src="item.imageUrl"
+            :alt="item.title"
+            :ratio="RATIOS[index % RATIOS.length]"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            class="transition-transform duration-[1600ms] ease-[var(--ease-expo)] group-hover:scale-[1.06]"
+          />
+
+          <span
+            class="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-espresso/85 via-espresso/10 to-transparent p-5 opacity-0 transition-opacity duration-700 group-hover:opacity-100 group-focus-within:opacity-100"
+          >
+            <span class="font-display text-xl italic text-gold-soft">{{ item.category.name }}</span>
+          </span>
+
+          <span
+            class="pointer-events-none absolute right-4 top-4 grid h-11 w-11 scale-75 place-items-center rounded-full bg-cream/90 text-cocoa-dark opacity-0 transition-all duration-500 ease-[var(--ease-expo)] group-hover:scale-100 group-hover:opacity-100 group-focus-within:scale-100 group-focus-within:opacity-100"
+          >
+            <AppIcon name="expand" class="h-4 w-4" />
+          </span>
         </button>
-      </div>
+
+        <!-- La réservation reste toujours visible : jamais cachée derrière un survol. -->
+        <figcaption class="flex flex-col gap-3 pt-5">
+          <div class="flex flex-col gap-1">
+            <h3
+              class="font-display text-[1.45rem] leading-snug"
+              :class="tone === 'dark' ? 'text-cream' : 'text-cocoa-dark'"
+            >
+              {{ item.title }}
+            </h3>
+            <p v-if="item.service" class="text-xs" :class="tone === 'dark' ? 'text-cream/60' : 'text-muted'">
+              {{ item.service.name }} ·
+              <span :class="tone === 'dark' ? 'text-gold-soft' : 'text-cocoa'">
+                {{ formatPrice(item.service.price, item.service.currency) }}
+              </span>
+            </p>
+            <p v-else class="text-xs" :class="tone === 'dark' ? 'text-cream/60' : 'text-muted'">
+              {{ item.category.name }}
+            </p>
+          </div>
+
+          <button
+            type="button"
+            class="group/btn inline-flex min-h-[44px] items-center gap-3 self-start text-[0.7rem] font-medium uppercase tracking-[0.22em] transition-colors"
+            :class="
+              tone === 'dark'
+                ? 'text-gold-soft hover:text-cream'
+                : 'text-cocoa-dark hover:text-gold'
+            "
+            @click="book(item)"
+          >
+            <span class="link-line">Réserver cette coiffure</span>
+            <AppIcon
+              name="arrow-right"
+              class="h-3.5 w-3.5 transition-transform duration-500 ease-[var(--ease-expo)] group-hover/btn:translate-x-1.5"
+            />
+          </button>
+        </figcaption>
+      </figure>
     </li>
   </ul>
 </template>

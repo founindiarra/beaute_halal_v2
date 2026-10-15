@@ -8,9 +8,10 @@ import AppImage from './AppImage.vue'
 /**
  * Bandeau d'en-tête commun aux pages intérieures.
  *
- * Même parti pris que l'accueil : texte sur l'ivoire, photographie dans une
- * arche. Chaque page fournit sa propre photo (le fond flouté, le marron et la
- * photo nette sont déjà fondus dans le fichier).
+ * La photo occupe tout le bandeau ; les visuels de page (salle floutée, brun
+ * de la marque, cliente détourée à droite) sont déjà composés pour cela. Le
+ * texte se pose à gauche, sur le brun. Sur téléphone, le cadrage portrait
+ * prend le haut et le texte descend en dessous.
  */
 const props = defineProps({
   eyebrow: { type: String, default: '' },
@@ -19,7 +20,7 @@ const props = defineProps({
   image: { type: String, default: null },
   /** Cadrage portrait pour les écrans étroits. Sans valeur, la photo large sert aux deux. */
   imageMobile: { type: String, default: null },
-  /** Conservé pour compatibilité : le cadrage en arche est le même pour toutes les photos. */
+  /** Conservé pour compatibilité avec les pages existantes. */
   pleinCadre: { type: Boolean, default: false },
   /** Partie de la photo à préserver (classe object-position Tailwind). */
   cadrage: { type: String, default: null },
@@ -34,47 +35,57 @@ const portrait = computed(() => source.value === props.imageMobile && Boolean(pr
 </script>
 
 <template>
-  <section class="relative overflow-hidden border-b border-sand-dark/50 bg-ivory">
-    <div
-      class="container-page grid items-end gap-8 pt-[6.25rem] sm:pt-28 lg:grid-cols-[1.3fr_0.7fr] lg:gap-16 lg:pt-32"
-    >
-      <div class="flex max-w-2xl flex-col gap-5 pb-2 lg:pb-16">
-        <span
-          v-if="eyebrow"
-          class="hero-rise flex items-center gap-4 text-[0.72rem] font-medium uppercase tracking-[0.3em] text-cocoa"
-        >
-          <span class="h-px w-10 bg-gold" aria-hidden="true" />
-          {{ eyebrow }}
-        </span>
-        <h1
-          class="hero-rise text-[2.3rem] leading-[1.02] tracking-[-0.01em] text-cocoa-dark [animation-delay:80ms] sm:text-5xl lg:text-[3.6rem]"
-        >
-          {{ title }}
-        </h1>
-        <p
-          v-if="description"
-          class="hero-rise max-w-xl text-base leading-relaxed text-muted [animation-delay:160ms] sm:text-[1.05rem]"
-        >
-          {{ description }}
-        </p>
-        <slot />
+  <section class="bg-espresso-deep grain relative isolate overflow-hidden">
+    <!-- Photo plein cadre -->
+    <div v-if="source" class="absolute inset-0 -z-10 fade-in">
+      <div v-parallax="0.12" class="absolute -inset-y-[8%] inset-x-0">
+        <AppImage
+          :src="source"
+          ratio="fill"
+          alt=""
+          eager
+          decorative
+          class="kenburns h-full w-full"
+          :img-class="cadrage || (portrait ? 'object-[70%_6%]' : 'object-[78%_40%]')"
+        />
       </div>
-
+      <!-- Le texte reste lisible : le brun reprend le dessus à gauche et en bas -->
       <div
-        v-if="source"
-        class="hero-fade arch-frame mx-auto w-full max-w-[17rem] lg:ml-auto lg:mr-0 lg:max-w-[19rem]"
+        class="absolute inset-0 bg-gradient-to-r from-espresso from-10% via-espresso/70 via-45% to-transparent to-85%"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-espresso/85 via-transparent to-espresso/40" />
+    </div>
+
+    <div
+      class="container-page flex flex-col justify-end gap-6 pb-14 pt-[8.5rem] sm:min-h-[26rem] sm:pb-16 sm:pt-40 lg:min-h-[30rem] lg:pb-20 lg:pt-44"
+      :class="portrait ? 'min-h-[34rem]' : ''"
+    >
+      <nav aria-label="Fil d’Ariane" class="rise text-[0.68rem] uppercase tracking-[0.28em] text-cream/55">
+        <RouterLink :to="{ name: 'home' }" class="transition-colors hover:text-gold-soft">
+          Accueil
+        </RouterLink>
+        <span class="mx-3 text-gold-soft/60" aria-hidden="true">/</span>
+        <span class="text-gold-soft">{{ eyebrow || title }}</span>
+      </nav>
+
+      <h1
+        v-split="150"
+        class="max-w-3xl text-[2.7rem] leading-[1] text-cream sm:text-6xl lg:text-[5.2rem]"
       >
-        <div class="arch">
-          <AppImage
-            :src="source"
-            :ratio="portrait ? '1/1' : '4/4.6'"
-            alt=""
-            eager
-            decorative
-            class="h-full w-full"
-            :img-class="cadrage || (portrait ? 'object-[70%_6%]' : 'object-[76%_40%]')"
-          />
-        </div>
+        {{ title }}
+      </h1>
+
+      <span class="rule-gold rule-gold-light w-28 rise [--d:500ms]" aria-hidden="true" />
+
+      <p
+        v-if="description"
+        class="rise max-w-xl text-base leading-relaxed text-cream/75 [--d:600ms] sm:text-[1.1rem]"
+      >
+        {{ description }}
+      </p>
+
+      <div class="rise [--d:700ms]">
+        <slot />
       </div>
     </div>
   </section>

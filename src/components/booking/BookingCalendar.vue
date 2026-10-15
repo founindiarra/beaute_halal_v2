@@ -112,7 +112,7 @@ const select = (day) => {
 </script>
 
 <template>
-  <div class="card-surface p-4 sm:p-7">
+  <div class="card-surface p-4 sm:p-8">
     <DataState
       :loading="loading"
       :error="error"
@@ -123,7 +123,7 @@ const select = (day) => {
       <div class="mb-5 flex items-center justify-between gap-3">
         <button
           type="button"
-          class="grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-sand-dark text-cocoa transition-colors enabled:hover:border-cocoa-dark enabled:hover:text-cocoa-dark disabled:opacity-30"
+          class="btn-round h-11 w-11 shrink-0 text-cocoa enabled:hover:border-espresso enabled:hover:bg-espresso enabled:hover:text-gold-soft disabled:opacity-30"
           :disabled="!canGoPrevious"
           aria-label="Mois précédent"
           @click="shiftMonth(-1)"
@@ -131,11 +131,11 @@ const select = (day) => {
           <AppIcon name="chevron-left" class="h-4 w-4" />
         </button>
 
-        <p class="font-display text-lg text-cocoa-dark sm:text-xl">{{ monthLabel }}</p>
+        <p class="font-display text-2xl italic text-cocoa-dark sm:text-3xl">{{ monthLabel }}</p>
 
         <button
           type="button"
-          class="grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-sand-dark text-cocoa transition-colors enabled:hover:border-cocoa-dark enabled:hover:text-cocoa-dark disabled:opacity-30"
+          class="btn-round h-11 w-11 shrink-0 text-cocoa enabled:hover:border-espresso enabled:hover:bg-espresso enabled:hover:text-gold-soft disabled:opacity-30"
           :disabled="!canGoNext"
           aria-label="Mois suivant"
           @click="shiftMonth(1)"
@@ -162,12 +162,12 @@ const select = (day) => {
           <button
             v-else
             type="button"
-            class="flex aspect-square min-h-[40px] w-full items-center justify-center rounded-full border text-sm transition-all duration-200 sm:text-base"
+            class="flex aspect-square min-h-[40px] w-full items-center justify-center rounded-full border text-sm transition-all duration-500 ease-[var(--ease-expo)] sm:text-base"
             :class="[
               selectedKey === day.key
-                ? 'border-cocoa-dark bg-cocoa-dark font-medium text-cream'
+                ? 'scale-105 border-espresso bg-espresso font-medium text-gold-soft shadow-[var(--shadow-soft)]'
                 : day.available
-                  ? 'border-transparent bg-ivory text-cocoa-dark hover:border-cocoa-dark'
+                  ? 'border-transparent bg-ivory text-cocoa-dark hover:-translate-y-0.5 hover:border-gold hover:bg-white'
                   : 'cursor-not-allowed border-transparent bg-ivory/60 text-muted/40 line-through',
               day.isToday && selectedKey !== day.key ? 'ring-1 ring-gold/50' : '',
             ]"

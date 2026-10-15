@@ -62,12 +62,12 @@ const hasAvailability = computed(() => slots.value.some((slot) => slot.available
           v-for="slot in slots"
           :key="slot.time"
           type="button"
-          class="min-h-[48px] rounded-full border px-3 py-2.5 text-base transition-all duration-200"
+          class="min-h-[48px] rounded-full border px-3 py-2.5 text-base transition-all duration-500 ease-[var(--ease-expo)]"
           :class="
             modelValue === slot.time
-              ? 'border-cocoa-dark bg-cocoa-dark font-medium text-cream'
+              ? 'scale-105 border-espresso bg-espresso font-medium text-gold-soft shadow-[var(--shadow-soft)]'
               : slot.available
-                ? 'border-transparent bg-ivory text-cocoa-dark hover:border-cocoa-dark'
+                ? 'border-transparent bg-ivory text-cocoa-dark hover:-translate-y-0.5 hover:border-gold hover:bg-white'
                 : 'cursor-not-allowed border-transparent bg-ivory/60 text-muted/40 line-through'
           "
           :disabled="!slot.available"
